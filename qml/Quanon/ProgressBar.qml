@@ -51,6 +51,6 @@ Item {
     Text {
         text: qsTr("Audio recording...")
         anchors.centerIn: parent
-        color: "yellow"
+        color: "#faff00"
     }
 }

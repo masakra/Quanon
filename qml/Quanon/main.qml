@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import QtMultimedia 5.0
-//import "Button.qml"
+import Processor 1.0
 
 Rectangle {
     width: 360
@@ -41,7 +41,7 @@ Rectangle {
         imageCapture {
             onImageCaptured: {
                 photoPrevew.source = preview
-                //imageProcessor.processImage( preview );
+                processor.processImage( preview );
             }
         }
     }
@@ -96,6 +96,10 @@ Rectangle {
                //progressBar.value = progress + 1
            //}
         }
+    }
+
+    Processor {
+        id: processor
     }
 
     /*
