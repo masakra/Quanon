@@ -14,6 +14,7 @@ public:
 
 public Q_SLOTS:
     void processImage( const QString & path );
+    void send();
 
 
 };

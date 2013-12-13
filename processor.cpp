@@ -56,3 +56,9 @@ Processor::audioCapture()
     recorder->setOutputLocation( QUrl::fromLocalFile("~/test.amr") );
 
 }
+
+void
+Processor::send()
+{
+    qDebug() << "send";
+}
