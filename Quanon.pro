@@ -14,8 +14,7 @@ QML_IMPORT_PATH = qml/Quanon
 # MOBILITY +=
 
 # The .cpp file which was generated for your project. Feel free to hack it.
-SOURCES += main.cpp \
-    processor.cpp
+SOURCES += main.cpp processor.cpp
 
 # Installation path
 # target.path =
@@ -32,3 +31,6 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 HEADERS += \
     processor.h
+
+RESOURCES += \
+    qml/Quanon/qml.qrc
