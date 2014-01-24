@@ -12,6 +12,7 @@
 #include <QJsonObject>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
+#include <QtXml>
 
 #include <QDebug>
 
@@ -108,6 +109,7 @@ Processor::send()
         //return; TODO uncomennt this line
     }
 
+    /*
     json.insert("img", QJsonValue::fromVariant( buf.buffer() ) );
 
     json.insert("audio", QJsonValue::fromVariant( m_audio_buffer.buffer() ) );
@@ -124,4 +126,28 @@ Processor::send()
 
     //nam->post( QNetworkRequest( QUrl("http://192.168.0.160/quanon.php") ),
     nam->post( request, jsonDoc.toJson() );
+    */
+
+    QDomDocument doc;
+
+    QDomElement root = doc.createElement("quanon");
+    doc.appendChild( root );
+
+    QDomElement img = doc.createElement("image");
+    root.appendChild( img );
+    img.setAttribute("data", "der image");
+
+    QDomText t = doc.createTextNode("lkajsd;flkajs;dlkfja;skldfj");
+    img.appendChild( t );
+
+
+    QDomElement aud = doc.createElement("audio");
+    root.appendChild( aud );
+
+    QDomText a = doc.createTextNode("audio doroga");
+    aud.appendChild( a );
+
+    qDebug() << doc.toString();
+
+
 }
