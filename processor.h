@@ -6,6 +6,7 @@
 #include <QImage>
 
 class QAudioInput;
+class QNetworkAccessManager;
 
 class Processor : public QObject
 {
@@ -18,6 +19,8 @@ class Processor : public QObject
         QBuffer m_audio_buffer;
 
         void audioCapture();
+
+        QNetworkAccessManager * nam;
 
     public:
         explicit Processor(QObject *parent = 0);

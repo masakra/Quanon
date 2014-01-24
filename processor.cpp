@@ -8,12 +8,15 @@
 #include <QAudioRecorder>
 #include <QAudioInput>
 #include <QBuffer>
+#include <QJsonDocument>
 #include <QJsonObject>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
 
 #include <QDebug>
 
 Processor::Processor(QObject *parent) :
-    QObject(parent), m_audio_in( 0 )
+    QObject(parent), m_audio_in( 0 ), nam( new QNetworkAccessManager( this ) )
 {
 }
 
@@ -102,7 +105,7 @@ Processor::send()
 
     if ( ! m_image.save( &buf, "PNG" ) ) {
         qWarning() << "Error image to buffer writing";
-        return;
+        //return; TODO uncomennt this line
     }
 
     json.insert("img", QJsonValue::fromVariant( buf.buffer() ) );
@@ -110,4 +113,15 @@ Processor::send()
     json.insert("audio", QJsonValue::fromVariant( m_audio_buffer.buffer() ) );
 
     // JSON готов к отправке
+    // или сделать QJsonDocument ?
+
+    QJsonDocument jsonDoc( json );
+
+    qDebug() << jsonDoc.toJson();
+
+    QNetworkRequest request( QUrl("http://192.168.0.160/quanon.php") );
+    request.setHeader( QNetworkRequest::ContentTypeHeader, "application/json" );
+
+    //nam->post( QNetworkRequest( QUrl("http://192.168.0.160/quanon.php") ),
+    nam->post( request, jsonDoc.toJson() );
 }
