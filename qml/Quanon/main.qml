@@ -95,7 +95,7 @@ Rectangle {
                 break;
             }
             case audioRecord: {
-                processor.send()
+                processor.send("manager")
                 setMode( ready )
             }
             }

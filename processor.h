@@ -28,7 +28,7 @@ class Processor : public QObject
     public Q_SLOTS:
         void processImage( const QString & path );
         void stopAudioRecord();
-        void send();
+        void send( const QString & author );
 };
 
 #endif // PROCESSOR_H

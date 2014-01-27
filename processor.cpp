@@ -94,7 +94,7 @@ Processor::stopAudioRecord()
 }
 
 void
-Processor::send()
+Processor::send( const QString & author )
 {
     stopAudioRecord();
 
@@ -133,21 +133,36 @@ Processor::send()
     QDomElement root = doc.createElement("quanon");
     doc.appendChild( root );
 
+    QDomElement aut = doc.createElement("author");
+    root.appendChild( aut );
+
+    QDomText m = doc.createTextNode( author );
+    aut.appendChild( m );
+
     QDomElement img = doc.createElement("image");
     root.appendChild( img );
-    img.setAttribute("data", "der image");
+    //img.setAttribute("data", "der image");
 
-    QDomText t = doc.createTextNode("lkajsd;flkajs;dlkfja;skldfj");
+    QDomText t = doc.createTextNode( buf.buffer().toBase64() );
     img.appendChild( t );
 
 
     QDomElement aud = doc.createElement("audio");
     root.appendChild( aud );
 
-    QDomText a = doc.createTextNode("audio doroga");
+    QDomText a = doc.createTextNode( m_audio_buffer.buffer().toBase64() );
     aud.appendChild( a );
 
+    doc.createProcessingInstruction("xml", "version\"1.0\" encoding=\"utf-8\"");
+
     qDebug() << doc.toString();
+
+    // отправить
+
+    QNetworkRequest request( QUrl("http://192.168.0.160/quanon.php") );
+    request.setHeader( QNetworkRequest::ContentTypeHeader, "application/xml" );
+
+    nam->post( request, doc.toByteArray() );
 
 
 }
