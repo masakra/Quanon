@@ -25,7 +25,8 @@ qtcAddDeployment()
 
 OTHER_FILES += \
     qml/Quanon/Button.qml \
-    android/AndroidManifest.xml
+    android/AndroidManifest.xml \
+    Dialog.qml
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

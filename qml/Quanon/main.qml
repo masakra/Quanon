@@ -151,11 +151,18 @@ Rectangle {
         MouseArea {
             anchors.fill: parent
             onClicked: {
+                dlgConfig.show('Quanon dialog');
+                return;
                 editURL.visible = true;
                 editURL.text = loadIni('url');
                 editURL.focus = true;
             }
         }
+    }
+
+    Dialog {
+        id: dlgConfig
+        anchors.centerIn: parent
     }
 
     TextInput {
