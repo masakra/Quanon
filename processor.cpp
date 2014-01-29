@@ -94,11 +94,11 @@ Processor::stopAudioRecord()
 }
 
 void
-Processor::send( const QString & author )
+Processor::send( const QString & author, const QString & server )
 {
     stopAudioRecord();
 
-    QJsonObject json;
+//    QJsonObject json;
 
 //    QByteArray img;
     QBuffer buf;//( &img );
@@ -130,39 +130,65 @@ Processor::send( const QString & author )
 
     QDomDocument doc;
 
-    QDomElement root = doc.createElement("quanon");
+    QDomElement root = doc.createElement("Elements");
     doc.appendChild( root );
 
-    QDomElement aut = doc.createElement("author");
-    root.appendChild( aut );
+    // Fields
+    QDomElement element = doc.createElement("Element");
+    doc.appendChild( element );
 
-    QDomText m = doc.createTextNode( author );
-    aut.appendChild( m );
+    QDomElement fields = doc.createElement("Fields");
+    element.appendChild( fields );
 
-    QDomElement img = doc.createElement("image");
-    root.appendChild( img );
-    //img.setAttribute("data", "der image");
+    QDomElement fieldAuthor = doc.createElement("Field");
+    fieldAuthor.setAttribute("Name", "Author");
+    fieldAuthor.appendChild( doc.createTextNode( author ) );
+    fields.appendChild( fieldAuthor );
 
-    QDomText t = doc.createTextNode( buf.buffer().toBase64() );
-    img.appendChild( t );
+    element.appendChild( fields );
+
+    // Files
+    QDomElement files = doc.createElement("Files");
+
+    QDomElement fileAudio = doc.createElement("File");
+    fileAudio.setAttribute("Name", "audio.wav");
+    fileAudio.appendChild( doc.createTextNode( m_audio_buffer.buffer().toBase64() ) );
+    files.appendChild( fileAudio );
+
+    QDomElement fileImage = doc.createElement("File");
+    fileImage.setAttribute("Name", "image.jpg");
+    fileImage.appendChild( doc.createTextNode( buf.buffer().toBase64() ) );
+    files.appendChild( fileImage );
+
+    element.appendChild( files );
+
+    root.appendChild( element );
+
+//    QDomElement img = doc.createElement("image");
+//    root.appendChild( img );
+//    //img.setAttribute("data", "der image");
+
+//    QDomText t = doc.createTextNode( buf.buffer().toBase64() );
+//    img.appendChild( t );
 
 
-    QDomElement aud = doc.createElement("audio");
-    root.appendChild( aud );
+//    QDomElement aud = doc.createElement("audio");
+//    root.appendChild( aud );
 
-    QDomText a = doc.createTextNode( m_audio_buffer.buffer().toBase64() );
-    aud.appendChild( a );
+//    QDomText a = doc.createTextNode( m_audio_buffer.buffer().toBase64() );
+//    aud.appendChild( a );
 
-    doc.createProcessingInstruction("xml", "version\"1.0\" encoding=\"utf-8\"");
+    QDomNode pi = doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"utf-8\"");
+    doc.insertBefore( pi, doc.firstChild() );
 
     qDebug() << doc.toString();
 
     // отправить
 
-    QNetworkRequest request( QUrl("http://192.168.0.160/quanon.php") );
-    request.setHeader( QNetworkRequest::ContentTypeHeader, "application/xml" );
+    QUrl url( server );
+    url.setPort(20001);
+    QNetworkRequest request( url );
+    request.setHeader( QNetworkRequest::ContentTypeHeader, QVariant("application/xml") );
 
     nam->post( request, doc.toByteArray() );
-
-
 }
