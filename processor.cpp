@@ -154,14 +154,14 @@ Processor::send( const QString & author, const QString & server )
 
     QDomElement fileAudio = doc.createElement("File");
     fileAudio.setAttribute("Name", "audio.wav");
-//    fileAudio.appendChild( doc.createTextNode( m_audio_buffer.buffer().toBase64() ) );
-    fileAudio.appendChild( doc.createTextNode("uuuu") );
+    fileAudio.appendChild( doc.createTextNode( m_audio_buffer.buffer().toBase64() ) );
+//    fileAudio.appendChild( doc.createTextNode("uuuu") );
     files.appendChild( fileAudio );
 
     QDomElement fileImage = doc.createElement("File");
     fileImage.setAttribute("Name", "image.jpg");
-//    fileImage.appendChild( doc.createTextNode( buf.buffer().toBase64() ) );
-    fileImage.appendChild( doc.createTextNode("jjjj") );
+    fileImage.appendChild( doc.createTextNode( buf.buffer().toBase64() ) );
+//    fileImage.appendChild( doc.createTextNode("jjjj") );
     files.appendChild( fileImage );
 
     element.appendChild( files );
