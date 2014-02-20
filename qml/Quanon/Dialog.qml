@@ -74,8 +74,8 @@ Rectangle {
     Button {
         id: buttonCancel
         text: qsTr("Cancel")
-        width: 75
-        height: 25
+        width: parent.width / 3
+        height: width / 3
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.rightMargin: 10
@@ -90,8 +90,8 @@ Rectangle {
     Button {
         id: buttonOk
         text: qsTr("OK")
-        width: 75
-        height: 25
+        width: parent.width / 3
+        height: width / 3
         anchors.bottom: parent.bottom
         anchors.right: buttonCancel.left
         anchors.bottomMargin: 10

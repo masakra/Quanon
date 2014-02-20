@@ -133,8 +133,8 @@ Rectangle {
 
     Rectangle {
         id: buttonConfig
-        width: 54
-        height: 54
+        width: Math.max( 54, Math.min( Math.min( parent.width, parent.height ) / 5, 255 ) );
+        height: width
         anchors.left: parent.left
         anchors.top: parent.top
         color: "black"
