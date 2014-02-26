@@ -17,8 +17,8 @@ Rectangle {
     function show() {
         page.opened();
         page.opacity = 1;
-        inputName.text = loadIni("user");
-        inputUrl.text = loadIni("url");
+        inputName.setText( loadIni("user") );
+        inputUrl.setText( loadIni("url") );
     }
 
     anchors.fill: parent
@@ -32,11 +32,22 @@ Rectangle {
 
     Text {
         id: textName
-        anchors.bottom: parent.verticalCenter
-        anchors.right: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.topMargin: 10
+        anchors.leftMargin: 10
         text: "Имя пользователя"
     }
 
+    LineEdit {
+        id: inputName
+        anchors.top: textName.bottom
+        anchors.leftMargin: 5
+        anchors.rightMargin: 5
+        width: parent.width
+    }
+
+    /*
     TextInput {
         id: inputName
         anchors.left: textName.right
@@ -46,14 +57,26 @@ Rectangle {
         height: textName.height
         color: "blue"
     }
+    */
 
     Text {
         id: textUrl
-        anchors.top: textName.bottom
-        anchors.right: textName.right
+        anchors.top: inputName.bottom
+        anchors.left: parent.left
+        anchors.topMargin: 10
+        anchors.leftMargin: 10
         text: "URL"
     }
 
+    LineEdit {
+        id: inputUrl
+        anchors.top: textUrl.bottom
+        anchors.leftMargin: 5
+        anchors.rightMargin: 5
+        width: parent.width
+    }
+
+    /*
     TextInput {
         id: inputUrl
         anchors.left: textUrl.right
@@ -63,6 +86,7 @@ Rectangle {
         width: 200
         color: "blue"
     }
+    */
 
 //    Text { id: dialogText; anchors.centerIn: parent; text: "Hello world!" }
 
@@ -106,8 +130,8 @@ Rectangle {
 
     function saveSettings()
     {
-        saveIni("user", inputName.text );
-        saveIni("url", inputUrl.text );
+        saveIni("user", inputName.text() );
+        saveIni("url", inputUrl.text() );
     }
 
     function openDb()
