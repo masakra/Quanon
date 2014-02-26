@@ -8,6 +8,7 @@ Rectangle {
 
     readonly property int ready: 0
     readonly property int audioRecord: 1
+    readonly property int locked: 2
     property int status: ready
 
     property var db: null
@@ -22,6 +23,7 @@ Rectangle {
             progressBar.visible = false
             progressBar.value = 0
             buttonReset.visible = false
+            buttonShot.visible = true
             buttonShot.text = qsTr("Shot")
             photoPrevew.visible = false
 
@@ -33,6 +35,11 @@ Rectangle {
             buttonShot.text = qsTr("Send")
             photoPrevew.visible = true
             break;
+        }
+        case locked: {
+            buttonShot.visible = false
+            buttonShot.text = qsTr("Locked...")
+            break
         }
         }
     }
@@ -208,6 +215,13 @@ Rectangle {
 
     Processor {
         id: processor
+
+    }
+
+    Connections {
+        target: processor
+        onSendBegin: { console.log("locked"); setMode( locked ) }
+        onSendEnd: { console.log("ready"); setMode( ready ) }
     }
 
     /*

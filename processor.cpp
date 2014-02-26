@@ -12,12 +12,13 @@
 #include <QJsonObject>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
+
 #include <QtXml>
 
 #include <QDebug>
 
 Processor::Processor(QObject *parent) :
-    QObject(parent), m_audio_in( 0 ), nam( new QNetworkAccessManager( this ) )
+    QObject(parent), m_audio_in( 0 ), m_nam( new QNetworkAccessManager( this ) )
 {
 }
 
@@ -195,5 +196,36 @@ Processor::send( const QString & author, const QString & server )
     QNetworkRequest request( url );
     request.setHeader( QNetworkRequest::ContentTypeHeader, QVariant("application/xml") );
 
-    nam->post( request, doc.toByteArray() );
+    emit sendBegin();
+
+    m_reply = m_nam->post( request, doc.toByteArray() );
+
+    connect( m_reply, SIGNAL( error( QNetworkReply::NetworkError ) ),
+             SLOT( replyError( QNetworkReply::NetworkError ) ) );
+    connect( m_reply, SIGNAL( sslErrors( QList< QSslError> ) ),
+             SLOT( replySslErrors( QList< QSslError > ) ) );
+    connect( m_reply, SIGNAL( finished() ), SLOT( replyFinished() ) );
+}
+
+void
+Processor::replyError( QNetworkReply::NetworkError error )
+{
+    qCritical() << "NetworkError: " << error;
+}
+
+void
+Processor::replySslErrors( QList< QSslError > errorList )
+{
+    int count = 0;
+    foreach( QSslError sslError, errorList ) {
+        qCritical() << ++count << " SSL error: " << sslError.errorString();
+    }
+}
+
+void
+Processor::replyFinished()
+{
+    qDebug() << "replyFinished";
+    m_reply->deleteLater();
+    emit sendEnd();
 }
