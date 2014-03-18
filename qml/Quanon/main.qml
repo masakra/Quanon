@@ -30,7 +30,7 @@ Rectangle {
             break;
         }
         case audioRecord: {
-               progressBar.visible = true
+            progressBar.visible = true
             buttonReset.visible = true
             buttonShot.text = qsTr("Send")
             photoPrevew.visible = true
@@ -102,7 +102,8 @@ Rectangle {
             }
             case audioRecord: {
                 processor.send( dlgConfig.loadIni("user"), dlgConfig.loadIni("url") );
-                setMode( ready )
+                timer.stop();
+                //setMode( ready )
             }
             }
         }
