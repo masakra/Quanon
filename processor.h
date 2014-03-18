@@ -1,6 +1,7 @@
 #ifndef PROCESSOR_H
 #define PROCESSOR_H
 
+#include <QAudioFormat>
 #include <QObject>
 #include <QBuffer>
 #include <QImage>
@@ -17,6 +18,8 @@ class Processor : public QObject
         QImage m_image;
 
         QAudioInput * m_audio_in;
+
+        QAudioFormat m_format;
 
         QBuffer m_audio_buffer;
 

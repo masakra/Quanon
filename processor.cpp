@@ -46,28 +46,22 @@ Processor::processImage( const QString & path )
 void
 Processor::audioCapture()
 {
-//    QByteArray output_bytes;
-//    QAudioInput * audio_in;
-    QAudioFormat format;
-//    QBuffer output_buffer;
-
-//    format.setFrequency( 8000 );
-//    format.setChannels( 1 );
-    format.setSampleSize( 16 );
-    format.setCodec("audio/pcm");
-    format.setByteOrder( QAudioFormat::LittleEndian );
-    format.setSampleType( QAudioFormat::UnSignedInt );
+    m_format.setSampleRate( 8000 );
+    m_format.setSampleSize( 16 );
+    m_format.setCodec("audio/pcm");
+    m_format.setByteOrder( QAudioFormat::LittleEndian );
+    m_format.setSampleType( QAudioFormat::UnSignedInt );
 
     m_audio_buffer.open( QIODevice::WriteOnly | QIODevice::Truncate );
 
     QAudioDeviceInfo info = QAudioDeviceInfo::defaultInputDevice();
 
-    if ( ! info.isFormatSupported( format ) ) {
+    if ( ! info.isFormatSupported( m_format ) ) {
         qWarning() << "default format do not supported, use nearest";
-        format = info.nearestFormat( format );
+        m_format = info.nearestFormat( m_format );
     }
 
-    m_audio_in = new QAudioInput( format, this );
+    m_audio_in = new QAudioInput( m_format, this );
     m_audio_in->start( &m_audio_buffer );
 
     /*
@@ -154,7 +148,11 @@ Processor::send( const QString & author, const QString & server )
     QDomElement files = doc.createElement("Files");
 
     QDomElement fileAudio = doc.createElement("File");
-    fileAudio.setAttribute("Name", "audio.wav");
+    fileAudio.setAttribute("Name", "audio.raw");
+    fileAudio.setAttribute("sampleRate", m_format.sampleRate() );
+    fileAudio.setAttribute("sampleSize", m_format.sampleSize() );
+    fileAudio.setAttribute("bypeOrder", m_format.byteOrder() );
+    fileAudio.setAttribute("sampleType", m_format.sampleType() );
     fileAudio.appendChild( doc.createTextNode( m_audio_buffer.buffer().toBase64() ) );
 //    fileAudio.appendChild( doc.createTextNode("uuuu") );
     files.appendChild( fileAudio );
