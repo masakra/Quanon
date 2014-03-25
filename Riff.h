@@ -27,13 +27,11 @@ class Riff
 		char subchunk2Id[ 4 ];		// 12
 		quint32 subchunk2Size;		// 13
 
-
 		void setData( const QBuffer & b );
 
 	public:
-		Riff();
+		Riff( const QAudioFormat & f );
 
-		void setAudioFormat( const QAudioFormat & f );
 
 
 		QByteArray rawData( const QBuffer & b );

@@ -4,7 +4,7 @@
 #include <QAudioFormat>
 #include <QBuffer>
 
-Riff::Riff()
+Riff::Riff( const QAudioFormat & f )
 	: subchunk1Size( 16 ),		// 5
 	audioFormat( 1 )			// 6	1 == PCM
 {
@@ -25,23 +25,6 @@ Riff::Riff()
 	subchunk1Id[ 2 ] = 't';
 	subchunk1Id[ 3 ] = ' ';
 	// 7
-	// 8
-	// 9
-	// 10
-	// 11
-	// 12
-	subchunk2Id[ 0 ] = 'd';
-	subchunk2Id[ 1 ] = 'a';
-	subchunk2Id[ 2 ] = 't';
-	subchunk2Id[ 3 ] = 'a';
-	// 13
-
-}
-
-void
-Riff::setAudioFormat( const QAudioFormat & f )
-{
-	// 7
 	numChannels = f.channelCount();
 	// 8
 	sampleRate = f.sampleRate();
@@ -51,6 +34,12 @@ Riff::setAudioFormat( const QAudioFormat & f )
 	blockAlign = f.channelCount() * f.sampleSize() / 8;
 	// 11
 	bitsPerSample = f.sampleSize();
+	// 12
+	subchunk2Id[ 0 ] = 'd';
+	subchunk2Id[ 1 ] = 'a';
+	subchunk2Id[ 2 ] = 't';
+	subchunk2Id[ 3 ] = 'a';
+	// 13
 }
 
 void

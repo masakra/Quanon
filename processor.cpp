@@ -65,19 +65,6 @@ Processor::audioCapture()
 
     m_audio_in = new QAudioInput( m_format, this );
     m_audio_in->start( &m_audio_buffer );
-
-    /*
-    QAudioRecorder * recorder = new QAudioRecorder;
-
-    QAudioEncoderSettings settings;
-
-    settings.setCodec("audio/amr");
-    settings.setQuality( QMultimedia::HighQuality );
-
-    recorder->setEncodingSettings( settings );
-
-    recorder->setOutputLocation( QUrl::fromLocalFile("~/test.amr") );
-    */
 }
 
 void
@@ -156,7 +143,7 @@ Processor::send( const QString & author, const QString & server )
     fileAudio.setAttribute("bypeOrder", m_format.byteOrder() );
     fileAudio.setAttribute("sampleType", m_format.sampleType() );
     //fileAudio.appendChild( doc.createTextNode( m_audio_buffer.buffer().toBase64() ) );
-    fileAudio.appendChild( doc.createTextNode( Riff().rawData( m_audio_buffer ).toBase64() ) );
+    fileAudio.appendChild( doc.createTextNode( Riff( m_format ).rawData( m_audio_buffer ).toBase64() ) );
 //    fileAudio.appendChild( doc.createTextNode("uuuu") );
     files.appendChild( fileAudio );
 
