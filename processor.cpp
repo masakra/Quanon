@@ -15,6 +15,8 @@
 
 #include <QtXml>
 
+#include "Riff.h"
+
 #include <QDebug>
 
 Processor::Processor(QObject *parent) :
@@ -148,12 +150,13 @@ Processor::send( const QString & author, const QString & server )
     QDomElement files = doc.createElement("Files");
 
     QDomElement fileAudio = doc.createElement("File");
-    fileAudio.setAttribute("Name", "audio.raw");
+    fileAudio.setAttribute("Name", "audio.wav");
     fileAudio.setAttribute("sampleRate", m_format.sampleRate() );
     fileAudio.setAttribute("sampleSize", m_format.sampleSize() );
     fileAudio.setAttribute("bypeOrder", m_format.byteOrder() );
     fileAudio.setAttribute("sampleType", m_format.sampleType() );
-    fileAudio.appendChild( doc.createTextNode( m_audio_buffer.buffer().toBase64() ) );
+    //fileAudio.appendChild( doc.createTextNode( m_audio_buffer.buffer().toBase64() ) );
+    fileAudio.appendChild( doc.createTextNode( Riff().rawData( m_audio_buffer ).toBase64() ) );
 //    fileAudio.appendChild( doc.createTextNode("uuuu") );
     files.appendChild( fileAudio );
 
