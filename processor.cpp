@@ -88,7 +88,7 @@ Processor::send( const QString & author, const QString & server )
     QBuffer buf;//( &img );
     buf.open( QIODevice::WriteOnly );
 
-    if ( ! m_image.save( &buf, "PNG" ) ) {
+    if ( ! m_image.save( &buf, "JPG" ) ) {
         qWarning() << "Error image to buffer writing";
         //return; TODO uncomennt this line
     }
