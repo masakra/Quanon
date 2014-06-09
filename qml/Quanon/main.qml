@@ -193,7 +193,7 @@ Rectangle {
 
     Timer {
         id: timer
-        interval: 30
+        interval: 60
         running: false
         repeat: true
         onTriggered: {
