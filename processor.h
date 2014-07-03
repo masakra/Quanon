@@ -29,6 +29,10 @@ class Processor : public QObject
 
         QNetworkReply * m_reply;
 
+        QString m_server;
+
+        int m_rowid;
+
     private Q_SLOTS:
         void replyError( QNetworkReply::NetworkError error );
         void replySslErrors( QList< QSslError > errorList );
@@ -36,7 +40,13 @@ class Processor : public QObject
 
     public:
         explicit Processor(QObject *parent = 0);
-        Q_INVOKABLE void send( const QString & author, const QString & url );
+        Q_INVOKABLE void save( const QString & author );
+
+        /*! \fn  void send( const QString & server )
+         *
+         * \brief Sends one latest message from SQLite3 database
+         */
+        Q_INVOKABLE void send( const QString & server );
 
     public Q_SLOTS:
         void processImage( const QString & path );
@@ -45,8 +55,7 @@ class Processor : public QObject
     Q_SIGNALS:
         void sendBegin();
         void sendEnd();
-
+        void message( const QString & text ) const;
 };
 
 #endif // PROCESSOR_H
-

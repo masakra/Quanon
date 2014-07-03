@@ -13,6 +13,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 
+#include <QtSql>
 #include <QtXml>
 
 #include "Riff.h"
@@ -22,6 +23,15 @@
 Processor::Processor(QObject *parent) :
     QObject(parent), m_audio_in( 0 ), m_nam( new QNetworkAccessManager( this ) )
 {
+    QSqlDatabase sqlite = QSqlDatabase::addDatabase("QSQLITE");
+    sqlite.setDatabaseName("quanon");
+
+    if ( sqlite.open() ) {
+        // rowid will be used for unique row id
+        sqlite.exec("CREATE TABLE IF NOT EXISTS message (value text)");
+    } else
+        qCritical() << "Ошибка открытия базы данных";
+
 }
 
 void
@@ -67,6 +77,50 @@ Processor::audioCapture()
     m_audio_in->start( &m_audio_buffer );
 }
 
+void Processor::send( const QString & server )
+{
+    qDebug() << "send( server )";
+    if ( server.isEmpty() )
+        return;
+
+    m_server = server;
+
+    QSqlQuery q;
+    q.prepare("SELECT "
+                 "rowid, "
+                 "value "
+              "FROM "
+                 "message "
+              "ORDER BY "
+                 "rowid "
+              "LIMIT "
+                 "1");
+
+    if ( q.exec() ) {
+        if ( q.first() ) {
+            m_rowid = q.value( 0 ).toInt();
+         // отправить
+         emit message( QString("Sending message %1").arg( m_rowid ) );
+
+         QUrl url( server );
+         url.setPort(20001);
+
+         QNetworkRequest request( url );
+         request.setHeader( QNetworkRequest::ContentTypeHeader, QVariant("application/xml") );
+
+         emit sendBegin();
+
+         m_reply = m_nam->post( request, q.value( 1 ).toByteArray() );
+
+         connect( m_reply, SIGNAL( error( QNetworkReply::NetworkError ) ),
+                 SLOT( replyError( QNetworkReply::NetworkError ) ) );
+         connect( m_reply, SIGNAL( sslErrors( QList< QSslError> ) ),
+                 SLOT( replySslErrors( QList< QSslError > ) ) );
+         connect( m_reply, SIGNAL( finished() ), SLOT( replyFinished() ) );
+       }
+   }
+}
+
 void
 Processor::stopAudioRecord()
 {
@@ -78,7 +132,7 @@ Processor::stopAudioRecord()
 }
 
 void
-Processor::send( const QString & author, const QString & server )
+Processor::save( const QString & author )
 {
     stopAudioRecord();
 
@@ -135,23 +189,20 @@ Processor::send( const QString & author, const QString & server )
 
     qDebug() << doc.toString();
 
-    // отправить
+    // сохранить
+    const QString xmlText = doc.toString();
 
-    QUrl url( server );
-    url.setPort(20001);
+    if ( xmlText.isEmpty() )
+        return;
 
-    QNetworkRequest request( url );
-    request.setHeader( QNetworkRequest::ContentTypeHeader, QVariant("application/xml") );
+    QSqlQuery q;
 
-    emit sendBegin();
+    q.prepare("INSERT INTO message ( value ) VALUES ( :value )");
+    q.bindValue(":value", xmlText );
 
-    m_reply = m_nam->post( request, doc.toByteArray() );
+    if ( ! q.exec() )
+        qCritical() << q.lastError().text();
 
-    connect( m_reply, SIGNAL( error( QNetworkReply::NetworkError ) ),
-             SLOT( replyError( QNetworkReply::NetworkError ) ) );
-    connect( m_reply, SIGNAL( sslErrors( QList< QSslError> ) ),
-             SLOT( replySslErrors( QList< QSslError > ) ) );
-    connect( m_reply, SIGNAL( finished() ), SLOT( replyFinished() ) );
 }
 
 void
@@ -172,7 +223,19 @@ Processor::replySslErrors( QList< QSslError > errorList )
 void
 Processor::replyFinished()
 {
+    emit message("Message delivered");
     qDebug() << "replyFinished";
     m_reply->deleteLater();
     emit sendEnd();
+
+    // удаление сообщения из SQLite базы данных
+
+    QSqlQuery q;
+    q.prepare("DELETE FROM message WHERE rowid = :rowid");
+    q.bindValue(":rowid", m_rowid );
+    if ( q.exec() )
+        send( m_server );
+    else
+        qDebug() << q.lastError().text();
+
 }

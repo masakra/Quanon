@@ -13,6 +13,7 @@ Rectangle {
 
     property var db: null
 
+
     function setMode( m ) {
 
         status = m
@@ -101,7 +102,8 @@ Rectangle {
                 break;
             }
             case audioRecord: {
-                processor.send( dlgConfig.loadIni("user"), dlgConfig.loadIni("url") );
+                processor.save( dlgConfig.loadIni("user") );
+                processor.send( dlgConfig.loadIni("url") );
                 timer.stop();
                 //setMode( ready )
             }
@@ -143,7 +145,7 @@ Rectangle {
         id: buttonConfig
         width: Math.max( 64, Math.min( Math.min( parent.width, parent.height ) / 5, 255 ) ); // from 64 to 255
         height: width
-        anchors.left: parent.left
+        anchors.right: parent.right
         anchors.top: parent.top
         color: "black"
         radius: 4
@@ -214,6 +216,13 @@ Rectangle {
         }
     }
 
+    Text {
+        id: message
+        text: "ok"
+        anchors.left: parent.left
+        anchors.top: parent.top
+    }
+
     Processor {
         id: processor
 
@@ -223,7 +232,13 @@ Rectangle {
         target: processor
         onSendBegin: { console.log("locked"); setMode( locked ) }
         onSendEnd: { console.log("ready"); setMode( ready ) }
+        onMessage: { message.text = text }
     }
+
+    Component.onCompleted: {
+        processor.send( dlgConfig.loadIni("url") );
+    }
+
 
     /*
     Component.onCompleted: {
