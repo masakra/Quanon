@@ -223,10 +223,14 @@ Processor::replySslErrors( QList< QSslError > errorList )
 void
 Processor::replyFinished()
 {
-    emit message("Message delivered");
-    qDebug() << "replyFinished";
+    qDebug() << "replyFinished" << m_reply->errorString();
+    const QNetworkReply::NetworkError ne = m_reply->error();
     m_reply->deleteLater();
     emit sendEnd();
+    emit message("Message delivered: " + m_reply->errorString() );
+
+    if ( ne != 0 )
+        return;
 
     // удаление сообщения из SQLite базы данных
 

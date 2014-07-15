@@ -141,18 +141,10 @@ Rectangle {
         visible: false
     }
 
-    Rectangle {
+    ToolButton {
         id: buttonConfig
-        width: Math.max( 64, Math.min( Math.min( parent.width, parent.height ) / 5, 255 ) ); // from 64 to 255
-        height: width
-        anchors.right: parent.right
+        anchors.left: parent.left
         anchors.top: parent.top
-        color: "black"
-        radius: 4
-        smooth: true
-        opacity: .2
-        anchors.topMargin: 4
-        anchors.leftMargin: 4
         Image {
             source: "qrc:/icon-config_48x48.png"
             anchors.centerIn: parent
@@ -163,6 +155,23 @@ Rectangle {
                 dlgConfig.show();
             }
         }
+    }
+
+    ToolButton {
+        id: buttonExit
+        anchors.right: parent.right
+        anchors.top: parent.top
+        Image {
+            source: "qrc:/exit_48x48.png"
+            anchors.centerIn: parent
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                Qt.quit();
+            }
+        }
+
     }
 
     Dialog {
@@ -218,9 +227,9 @@ Rectangle {
 
     Text {
         id: message
-        text: "ok"
+        text: "ready"
         anchors.left: parent.left
-        anchors.top: parent.top
+        anchors.bottom: parent.bottom
     }
 
     Processor {

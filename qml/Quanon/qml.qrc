@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>icon-config_48x48.png</file>
+        <file>exit_48x48.png</file>
     </qresource>
 </RCC>
