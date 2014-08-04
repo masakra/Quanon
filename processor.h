@@ -35,7 +35,7 @@ class Processor : public QObject
 
     private Q_SLOTS:
         void replyError( QNetworkReply::NetworkError error );
-        void replySslErrors( QList< QSslError > errorList );
+        //void replySslErrors( QList< QSslError > errorList );
         void replyFinished();
 
     public:

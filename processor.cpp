@@ -114,8 +114,8 @@ void Processor::send( const QString & server )
 
          connect( m_reply, SIGNAL( error( QNetworkReply::NetworkError ) ),
                  SLOT( replyError( QNetworkReply::NetworkError ) ) );
-         connect( m_reply, SIGNAL( sslErrors( QList< QSslError> ) ),
-                 SLOT( replySslErrors( QList< QSslError > ) ) );
+         //connect( m_reply, SIGNAL( sslErrors( QList< QSslError> ) ),
+                 //SLOT( replySslErrors( QList< QSslError > ) ) );
          connect( m_reply, SIGNAL( finished() ), SLOT( replyFinished() ) );
        }
    }
@@ -211,6 +211,7 @@ Processor::replyError( QNetworkReply::NetworkError error )
     qCritical() << "NetworkError: " << error;
 }
 
+/*
 void
 Processor::replySslErrors( QList< QSslError > errorList )
 {
@@ -219,6 +220,7 @@ Processor::replySslErrors( QList< QSslError > errorList )
         qCritical() << ++count << " SSL error: " << sslError.errorString();
     }
 }
+*/
 
 void
 Processor::replyFinished()
