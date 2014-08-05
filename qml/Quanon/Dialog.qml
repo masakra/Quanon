@@ -18,8 +18,6 @@ Rectangle {
     function show() {
         page.opened();
         page.opacity = 1;
-        //inputName.setText( loadIni("user") );
-        //inputUrl.setText( loadIni("url") );
         inputName.text = loadIni("user");
         inputUrl.text = loadIni("url")
     }
@@ -42,15 +40,6 @@ Rectangle {
         text: "Имя пользователя"
     }
 
-    /*
-    LineEdit {
-        id: inputName
-        anchors.top: textName.bottom
-        anchors.leftMargin: 5
-        anchors.rightMargin: 5
-        width: parent.width
-    }
-    */
     TextField {
         id: inputName
         anchors.top: textName.bottom
@@ -58,18 +47,6 @@ Rectangle {
         anchors.rightMargin: 5
         width: parent.width
     }
-
-    /*
-    TextInput {
-        id: inputName
-        anchors.left: textName.right
-        anchors.bottom: textName.bottom
-        anchors.leftMargin: 5
-        width: 200
-        height: textName.height
-        color: "blue"
-    }
-    */
 
     Text {
         id: textUrl
@@ -80,15 +57,6 @@ Rectangle {
         text: "URL"
     }
 
-    /*
-    LineEdit {
-        id: inputUrl
-        anchors.top: textUrl.bottom
-        anchors.leftMargin: 5
-        anchors.rightMargin: 5
-        width: parent.width
-    }
-    */
     TextField {
         id: inputUrl
         anchors.top: textUrl.bottom
@@ -96,25 +64,6 @@ Rectangle {
         anchors.rightMargin: 5
         width: parent.width
     }
-
-    /*
-    TextInput {
-        id: inputUrl
-        anchors.left: textUrl.right
-        anchors.bottom: textUrl.bottom
-        anchors.leftMargin: 5
-        height: textUrl.height
-        width: 200
-        color: "blue"
-    }
-    */
-
-//    Text { id: dialogText; anchors.centerIn: parent; text: "Hello world!" }
-
-//    MouseArea {
-//        anchors.fill: parent
-//        onClicked: ;
-//    }
 
     Button {
         id: buttonCancel
