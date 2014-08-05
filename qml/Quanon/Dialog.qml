@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Controls 1.2
 import QtQuick.LocalStorage 2.0
 
 Rectangle {
@@ -17,8 +18,10 @@ Rectangle {
     function show() {
         page.opened();
         page.opacity = 1;
-        inputName.setText( loadIni("user") );
-        inputUrl.setText( loadIni("url") );
+        //inputName.setText( loadIni("user") );
+        //inputUrl.setText( loadIni("url") );
+        inputName.text = loadIni("user");
+        inputUrl.text = loadIni("url")
     }
 
     anchors.fill: parent
@@ -39,7 +42,16 @@ Rectangle {
         text: "Имя пользователя"
     }
 
+    /*
     LineEdit {
+        id: inputName
+        anchors.top: textName.bottom
+        anchors.leftMargin: 5
+        anchors.rightMargin: 5
+        width: parent.width
+    }
+    */
+    TextField {
         id: inputName
         anchors.top: textName.bottom
         anchors.leftMargin: 5
@@ -68,7 +80,16 @@ Rectangle {
         text: "URL"
     }
 
+    /*
     LineEdit {
+        id: inputUrl
+        anchors.top: textUrl.bottom
+        anchors.leftMargin: 5
+        anchors.rightMargin: 5
+        width: parent.width
+    }
+    */
+    TextField {
         id: inputUrl
         anchors.top: textUrl.bottom
         anchors.leftMargin: 5
@@ -130,8 +151,8 @@ Rectangle {
 
     function saveSettings()
     {
-        saveIni("user", inputName.text() );
-        saveIni("url", inputUrl.text() );
+        saveIni("user", inputName.text );
+        saveIni("url", inputUrl.text );
     }
 
     function openDb()
